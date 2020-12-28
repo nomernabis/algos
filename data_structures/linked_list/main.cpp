@@ -1,62 +1,58 @@
 #include<iostream>
 
 struct Node{
-    int data;
-    Node* next;
-    explicit Node(int x){
-        data = x;
+    int data = 0;
+    Node* next = nullptr;
+    explicit Node(int value){
+        data = value;
     }
 };
 
 struct List{
     Node* head = nullptr;
     Node* tail = nullptr;
-    List(){
+    void add(Node* n){
+        if(tail) tail->next = n;
+        tail = n;
+        if(!head) head = tail;
     }
-    ~List(){
-        Node* cur = head;
-        while(cur){
-            Node* next = cur->next;
-            delete cur;
-            cur = next;
-        }
-    }
-    void add_tail(Node* n){
-        if(tail == nullptr) {
-            tail = n;
-            head = tail;
-        } else {
-            tail->next = n;
-            tail = n;
-        }
-    }
-    void add_head(Node* n){
-        if(head == nullptr) {
-            head = n;
-            tail = head;
-        } else {
-            n->next = head;
-            head = n;
+    void remove(Node* n){
+        if(n == head) head = head->next;
+        else {
+            Node* walk = head;
+            while(walk->next != n) walk = walk->next;
+            walk->next = n->next;
+            if(n == tail) tail = walk;
         }
     }
     void print(){
-        Node* cur = head;
-        while(cur){
-            std::cout << cur->data << " ";
-            cur = cur->next;
+        Node* walk = head;
+        while(walk){
+            std::cout << walk->data << " ";
+            walk = walk->next;
         }
-        std::cout << "\n";
+        std::cout << std::endl;
     }
 };
 
 int main(){
-    List list;
     Node* a = new Node(1);
     Node* b = new Node(2);
     Node* c = new Node(3);
-    list.add_tail(a);
-    list.add_tail(b);
-    list.add_head(c);
+    Node* d = new Node(4);
+    Node* e = new Node(5);
+    List list;
+    list.add(a);
+    list.add(b);
+    list.add(c);
+    list.add(d);
+    list.add(e);
+    list.print();
+    list.remove(c);
+    list.print();
+    list.remove(a);
+    list.print();
+    list.remove(e);
     list.print();
     return 0;
 }
